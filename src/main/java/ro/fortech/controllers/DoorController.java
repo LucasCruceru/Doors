@@ -5,32 +5,36 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ro.fortech.entities.Door;
 import ro.fortech.repositories.DoorRepository;
 
 import java.util.List;
-@RestController("/{username}")
-public class ActionController {
+
+@RestController("/door")
+public class DoorController {
 
     private final DoorRepository doorRepository;
 
     @Autowired
-    public ActionController(DoorRepository doorRepository) {
+    public DoorController(DoorRepository doorRepository){
         this.doorRepository = doorRepository;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List showOptions() {
+    public List readAllDoors(){
         return this.doorRepository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/open/{doorName}")
-    public void open(@PathVariable String doorName) {
-        doorRepository.findByName(doorName).get().open();
+    @RequestMapping(method = RequestMethod.GET, value = "/{doorId}")
+    public Door readOneDoor(@PathVariable Long doorId){
+        return this.doorRepository.findOne(doorId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/close/{doorName}")
-    public void close(@PathVariable String doorName){
-         doorRepository.findByName(doorName).get().close();
-}
 
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")
+    public List deleteDoor(@PathVariable Long userId) {
+        doorRepository.delete(userId);
+        return readAllDoors();
+    }
 }

@@ -1,7 +1,9 @@
 package ro.fortech;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -11,16 +13,14 @@ import ro.fortech.entities.Door;
 import ro.fortech.entities.User;
 import ro.fortech.repositories.DoorRepository;
 import ro.fortech.repositories.UserRepository;
-
+@SpringBootApplication
+@EnableAutoConfiguration
 @ComponentScan(basePackages = "ro.fortech")
 @EntityScan(basePackages = "ro.fortech.entities")
 @EnableJpaRepositories(basePackages = "ro.fortech.repositories")
-@SpringBootApplication
 public class Application {
 
 	public static void main(String[] args) {
-
-
 		SpringApplication.run(Application.class, args);
 	}
 

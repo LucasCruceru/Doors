@@ -1,5 +1,7 @@
 package ro.fortech.entities;
 
+import ro.fortech.Actions;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +28,12 @@ public class Door {
         this.isClosed = isClosed;
     }
 
+    public boolean open(){
+        return this.isClosed = false;
+    }
+    public boolean close(){
+        return this.isClosed = true;
+    }
     Door(){}
 
 }

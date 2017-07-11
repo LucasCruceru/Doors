@@ -23,9 +23,9 @@ public class UserController {
         return this.userRepository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public User readOneUser(@PathVariable Long id){
-        return  this.userRepository.findOne(id);
+    @RequestMapping(method = RequestMethod.GET, value = "/{userId}")
+    public User readOneUser(@PathVariable Long userId){
+        return this.userRepository.findOne(userId);
     }
 
 //    @RequestMapping(method = RequestMethod.POST)
@@ -47,12 +47,11 @@ public class UserController {
 //                .orElse(ResponseEntity.noContent().build());
 //
 //    }
-////
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public List deleteUsers(@PathVariable Long id) {
-        userRepository.delete(id);
 
-        return this.readUsers();
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")
+    public List deleteUsers(@PathVariable Long userId) {
+        userRepository.delete(userId);
+        return readUsers();
     }
 
 

@@ -94,18 +94,17 @@ public class UserControllerTests {
 
 	@Test
 	public void readSingleUserTest() throws Exception {
-		System.out.println(json(this.users.get(0)));
+
 		mockMvc.perform(get("/user/"
 				+this.users.get(0).getId()))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(contentType))
-				.andExpect(jsonPath("id", is(this.users.get(0).getId())))
-				.andExpect(jsonPath("username", is("password")));
+				.andExpect(jsonPath("[0].id", is(this.users.get(0).getId() + "L"))) // whattt?
+				.andExpect(jsonPath("[0].username", is("password")));
 	}
 
 	@Test
 	public void readUsers() throws Exception {
-
 
 		mockMvc.perform(get("/user"))
 				.andExpect(status().isOk())
@@ -121,20 +120,22 @@ public class UserControllerTests {
 
 	@Test
 	public void deleteSingleBookmark() throws Exception {
-		mockMvc.perform(delete("/bookmarks/"
-				+ this.users.get(0).getId()))
-				.andExpect(content().contentType(contentType))
-				.andExpect(jsonPath("content", hasSize(1)));
+        System.out.println(json(this.users));
+        mockMvc.perform(delete("/user/"
+				+ this.users.get(0).getId())
+                .contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(1)));
+        System.out.println(json(this.users));
 	}
 
 	@Test
 	public void createUser() throws Exception {
-		String bookmarkJson = json(new User(
+		String userJson = json(new User(
 				"password", "anastasia"));
 
-		this.mockMvc.perform(post("/" + username)
+		this.mockMvc.perform(post("/user")
 				.contentType(contentType)
-				.content(bookmarkJson))
+				.content(userJson))
 				.andExpect(status().isCreated());
 	}
 
