@@ -1,4 +1,4 @@
-package ro.fortech;//Created by internship on 12.07.2017.
+package ro.fortech;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,17 +28,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-public class ActionController {
+public class ActionControllerTests {
 
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
@@ -88,8 +84,8 @@ public class ActionController {
         this.users.add(userRepository.save(new User(username, "password")));
 
 
-        this.doors.add(doorRepository.save(new Door("Garage Door", true)));
-        this.doors.add(doorRepository.save(new Door("Front Door", true)));
+        this.doors.add(doorRepository.save(new Door("GarageDoor", true)));
+        this.doors.add(doorRepository.save(new Door("FrontDoor", true)));
 
 
 
@@ -121,10 +117,10 @@ public class ActionController {
 				.andExpect(content().contentType(contentType))
 				.andExpect(jsonPath("$", hasSize(2)))
 				.andExpect(jsonPath("[0].id",is(this.doors.get(0).getId().intValue())))
-				.andExpect(jsonPath("[0].name", is("Garage Door")))
+				.andExpect(jsonPath("[0].name", is("GarageDoor")))
 				.andExpect(jsonPath("[0].closed", is(true)))
 				.andExpect(jsonPath("[1].id",is(this.doors.get(1).getId().intValue())))
-				.andExpect(jsonPath("[1].name", is("Front Door")))
+				.andExpect(jsonPath("[1].name", is("FrontDoor")))
 				.andExpect(jsonPath("[1].closed", is(true)));
 
 	}

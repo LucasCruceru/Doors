@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ro.fortech.entities.Door;
 import ro.fortech.repositories.DoorRepository;
 
 import java.util.List;
@@ -23,16 +24,20 @@ public class ActionController {
         return this.doorRepository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/open/{doorName}")
-    public void open(@PathVariable String doorName) {
+    @RequestMapping(method = RequestMethod.POST, value = "/open/{doorName}")
+    public Door open(@PathVariable String doorName) {
 
         doorRepository.findByName(doorName).get().open();
+
+        return doorRepository.findByName(doorName).get();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/close/{doorName}")
-    public void close(@PathVariable String doorName){
+    @RequestMapping(method = RequestMethod.POST, value = "/close/{doorName}")
+    public Door close(@PathVariable String doorName){
 
         doorRepository.findByName(doorName).get().close();
+
+        return doorRepository.findByName(doorName).get();
 }
 
 }
