@@ -7,4 +7,6 @@
 //@Repository
 //public interface LogRepository extends JpaRepository<Log, Long> {
 //
+//
+//
 //}

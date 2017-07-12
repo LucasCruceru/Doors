@@ -96,7 +96,7 @@ public class ActionControllerTests {
     @Test
     public void openTest() throws Exception {
 
-        mockMvc.perform(get("/" + username + "/open/"
+        mockMvc.perform(get("/action/" + username + "/open/"
                 + this.doors.get(0).getName()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("[0].closed", is(false)));
@@ -104,7 +104,7 @@ public class ActionControllerTests {
 
     @Test
     public void closeTest() throws Exception {
-        mockMvc.perform(get("/" + username + "/close/"
+        mockMvc.perform(get("/action/" + username + "/close/"
                 + this.doors.get(0).getName()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("[0].closed", is(true)));
@@ -112,7 +112,7 @@ public class ActionControllerTests {
             @Test
 	public void seeOptions() throws Exception {
 
-		mockMvc.perform(get("/" + username))
+		mockMvc.perform(get("/action/" + username))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(contentType))
 				.andExpect(jsonPath("$", hasSize(2)))

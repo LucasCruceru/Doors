@@ -24,12 +24,5 @@ public class Application {
 	}
 
 
-}
-//	@Bean
-//	public void init(UserRepository userRepository,
-//						   DoorRepository doorRepository) {
-//		User user = userRepository.save(new User("password", "lucas"));
-//
-//		Door garageDoor = doorRepository.save(new Door("Garage Door", true));
-//		Door frontDoor = doorRepository.save(new Door("Front Door", true));
 //	}
+}

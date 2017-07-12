@@ -9,7 +9,7 @@ import ro.fortech.entities.Door;
 import ro.fortech.repositories.DoorRepository;
 
 import java.util.List;
-@RestController("/{username}")
+@RestController(value = "/action/{username}")
 public class ActionController {
 
     private final DoorRepository doorRepository;
@@ -19,7 +19,7 @@ public class ActionController {
         this.doorRepository = doorRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public List showOptions() {
         return this.doorRepository.findAll();
     }

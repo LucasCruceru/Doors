@@ -29,10 +29,10 @@ public class Door {
     public boolean open(){
         return this.isClosed = false;
     }
+
     public boolean close(){
         return this.isClosed = true;
     }
-
 
     Door(){}
 

@@ -13,23 +13,23 @@ import java.util.List;
 @RestController("/door")
 public class DoorController {
 
-//    private final DoorRepository doorRepository;
-//
-//    @Autowired
-//    public DoorController(DoorRepository doorRepository){
-//        this.doorRepository = doorRepository;
-//    }
-//
-//    @RequestMapping(method = RequestMethod.GET)
-//    public List readAllDoors(){
-//        return this.doorRepository.findAll();
-//    }
+    private final DoorRepository doorRepository;
+
+    @Autowired
+    public DoorController(DoorRepository doorRepository){
+        this.doorRepository = doorRepository;
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List readAllDoors(){
+        return this.doorRepository.findAll();
+    }
 //
 //    @RequestMapping(method = RequestMethod.GET, value = "/{doorId}")
 //    public Door readOneDoor(@PathVariable Long doorId){
 //        return this.doorRepository.findOne(doorId);
 //    }
-//
+
 //
 //
 //    @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")

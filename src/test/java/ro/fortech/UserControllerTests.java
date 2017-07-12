@@ -13,9 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import ro.fortech.entities.Door;
 import ro.fortech.entities.User;
-import ro.fortech.repositories.DoorRepository;
 import ro.fortech.repositories.UserRepository;
 
 import java.io.IOException;
@@ -27,12 +25,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
@@ -52,13 +46,10 @@ public class UserControllerTests {
 
 	private HttpMessageConverter mappingJackson2HttpMessageConverter;
 
-	private List<Door> doors = new ArrayList<>();
 	private List<User> users = new ArrayList<>();
 
 	private User user;
 
-	@Autowired
-	private DoorRepository doorRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -82,35 +73,24 @@ public class UserControllerTests {
 	public void setup() throws Exception {
 		this.mockMvc = webAppContextSetup(webApplicationContext).build();
 
-		this.doorRepository.deleteAllInBatch();
 		this.userRepository.deleteAllInBatch();
 
 
 		this.users.add(userRepository.save(new User(username, "password")));
-		this.users.add(userRepository.save(new User("flavius ", "password")));
+		this.users.add(userRepository.save(new User("flavius", "password")));
 
 
 	}
 
-	@Test
-	public void readSingleUserTest() throws Exception {
-
-		mockMvc.perform(get("/user/"
-				+this.users.get(0).getId()))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(contentType))
-				.andExpect(jsonPath("[0].id", is(this.users.get(0).getId() + "L"))) // whattt?
-				.andExpect(jsonPath("[0].username", is("password")));
-	}
 
 	@Test
 	public void readUsers() throws Exception {
 
-		mockMvc.perform(get("/user"))
+		mockMvc.perform(get("/users/getAll"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(contentType))
 				.andExpect(jsonPath("$", hasSize(2)))
-				.andExpect(jsonPath("[0].id",is(this.users.get(0).getId().intValue())))
+				.andExpect(jsonPath("[0]id",is(this.users.get(0).getId().intValue())))
 				.andExpect(jsonPath("[0].username", is("password")))
 				.andExpect(jsonPath("[1].id",is(this.users.get(1).getId().intValue())))
 				.andExpect(jsonPath("[1].username", is("password")));
@@ -119,44 +99,58 @@ public class UserControllerTests {
 	}
 
 	@Test
+	public void readSingleUserTest() throws Exception {
+
+		System.out.println(json(this.users.get(0)));
+		mockMvc.perform(get("/users/"
+				+this.users.get(0).getId()))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(contentType))
+				.andExpect(jsonPath("id",is(this.users.get(0).getId().intValue())))
+				.andExpect(jsonPath("username", is("password")));
+	}
+
+
+
+	@Test
 	public void deleteSingleBookmark() throws Exception {
         System.out.println(json(this.users));
-        mockMvc.perform(delete("/user/"
+        mockMvc.perform(delete("/users/"
 				+ this.users.get(0).getId())
                 .contentType(contentType))
-                .andExpect(jsonPath("$", hasSize(1)));
-        System.out.println(json(this.users));
+                .andExpect(status().isOk());
 	}
 
 	@Test
 	public void createUser() throws Exception {
 		String userJson = json(new User(
-				"password", "anastasia"));
+				"anastasia", "password"));
 
-		this.mockMvc.perform(post("/user")
+		this.mockMvc.perform(post("/users")
 				.contentType(contentType)
 				.content(userJson))
 				.andExpect(status().isCreated());
 	}
 
-//	@Test
-//	public void seeOptions() throws Exception {
-//
-//		System.out.println(json(this.doorList));
-//
-//		mockMvc.perform(get("/" + username))
-//				.andExpect(status().isOk())
-//				.andExpect(content().contentType(contentType))
-//				.andExpect(jsonPath("$", hasSize(2)))
-//				.andExpect(jsonPath("[0].id",is(this.doorList.get(0).getId().intValue())))
-//				.andExpect(jsonPath("[0].name", is("Garage Door")))
-//				.andExpect(jsonPath("[0].closed", is(true)))
-//				.andExpect(jsonPath("[1].id",is(this.doorList.get(1).getId().intValue())))
-//				.andExpect(jsonPath("[1].name", is("Front Door")))
-//				.andExpect(jsonPath("[1].closed", is(true)));
-//
-//	}
+	@Test
+	public void updateTest() throws Exception {
 
+		User temp = new User("Bogdan", "password");
+
+		this.users.get(0).updateUser(temp);
+
+		String userJson = json(this.users.get(0));
+
+		this.mockMvc.perform(put("/users/" +
+				this.users.get(0).getId())
+				.contentType(contentType)
+				.content(userJson))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("username", is("password")));
+
+
+
+	}
 
 	private String json(Object o) throws IOException {
 		MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();

@@ -30,4 +30,10 @@ public class User {
     }
 
     User(){}
+
+    public void updateUser(User input) {
+        this.password = input.password;
+        this.username = input.username;
+
+    }
 }
