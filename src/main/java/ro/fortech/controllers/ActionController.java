@@ -25,12 +25,14 @@ public class ActionController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/open/{doorName}")
     public void open(@PathVariable String doorName) {
+
         doorRepository.findByName(doorName).get().open();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/close/{doorName}")
     public void close(@PathVariable String doorName){
-         doorRepository.findByName(doorName).get().close();
+
+        doorRepository.findByName(doorName).get().close();
 }
 
 }

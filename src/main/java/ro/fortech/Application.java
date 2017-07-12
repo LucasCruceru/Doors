@@ -14,7 +14,6 @@ import ro.fortech.entities.User;
 import ro.fortech.repositories.DoorRepository;
 import ro.fortech.repositories.UserRepository;
 @SpringBootApplication
-@EnableAutoConfiguration
 @ComponentScan(basePackages = "ro.fortech")
 @EntityScan(basePackages = "ro.fortech.entities")
 @EnableJpaRepositories(basePackages = "ro.fortech.repositories")
@@ -24,6 +23,8 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
+
+}
 //	@Bean
 //	public void init(UserRepository userRepository,
 //						   DoorRepository doorRepository) {
@@ -32,4 +33,3 @@ public class Application {
 //		Door garageDoor = doorRepository.save(new Door("Garage Door", true));
 //		Door frontDoor = doorRepository.save(new Door("Front Door", true));
 //	}
-}

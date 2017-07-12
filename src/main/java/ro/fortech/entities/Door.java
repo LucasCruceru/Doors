@@ -1,10 +1,8 @@
 package ro.fortech.entities;
 
-import ro.fortech.Actions;
-
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class Door {
@@ -34,6 +32,8 @@ public class Door {
     public boolean close(){
         return this.isClosed = true;
     }
+
+
     Door(){}
 
 }
