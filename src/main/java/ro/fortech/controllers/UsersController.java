@@ -28,7 +28,7 @@ public class UsersController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")
-    public ResponseEntity deleteUsers(@PathVariable Long userId) {
+    public ResponseEntity deleteUser(@PathVariable Long userId) {
         userRepository.delete(userId);
         if (!userRepository.exists(userId))
             return ResponseEntity.ok().body("User Deleted");

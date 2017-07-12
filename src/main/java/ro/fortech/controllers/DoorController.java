@@ -1,40 +1,57 @@
 package ro.fortech.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ro.fortech.entities.Door;
 import ro.fortech.repositories.DoorRepository;
 
+import java.net.URI;
 import java.util.List;
 
-@RestController("/door")
+@RestController
+@RequestMapping("/doors")
 public class DoorController {
 
-    private final DoorRepository doorRepository;
-
     @Autowired
-    public DoorController(DoorRepository doorRepository){
-        this.doorRepository = doorRepository;
-    }
+    private  DoorRepository doorRepository;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     public List readAllDoors(){
         return this.doorRepository.findAll();
     }
-//
-//    @RequestMapping(method = RequestMethod.GET, value = "/{doorId}")
-//    public Door readOneDoor(@PathVariable Long doorId){
-//        return this.doorRepository.findOne(doorId);
-//    }
 
-//
-//
-//    @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")
-//    public List deleteDoor(@PathVariable Long userId) {
-//        doorRepository.delete(userId);
-//        return readAllDoors();
-//    }
+    @RequestMapping(method = RequestMethod.GET, value = "/{doorId}")
+    public Door readOneDoor(@PathVariable Long doorId){
+        return this.doorRepository.findOne(doorId);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{doorId}")
+    public ResponseEntity deleteDoor(@PathVariable Long doorId) {
+        doorRepository.delete(doorId);
+        if (!doorRepository.exists(doorId))
+            return ResponseEntity.ok().body("Door Deleted");
+        else
+            return ResponseEntity.unprocessableEntity().build();
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Object> add(@RequestBody Door input) {
+
+        Door result = doorRepository.save(new Door(input.getName(), input.isClosed()));
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(result.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{doorId}")
+    public Door update(@PathVariable Long doorId, @RequestBody Door input) {
+        this.doorRepository.findOne(doorId).updateDoor(input);
+        return this.doorRepository.findOne(doorId);
+    }
+
 }

@@ -84,7 +84,7 @@ public class UserControllerTests {
 
 
 	@Test
-	public void readUsers() throws Exception {
+	public void readUsersTest() throws Exception {
 
 		mockMvc.perform(get("/users/getAll"))
 				.andExpect(status().isOk())
@@ -113,7 +113,7 @@ public class UserControllerTests {
 
 
 	@Test
-	public void deleteSingleBookmark() throws Exception {
+	public void deleteSingleUserTest() throws Exception {
         System.out.println(json(this.users));
         mockMvc.perform(delete("/users/"
 				+ this.users.get(0).getId())
@@ -122,7 +122,7 @@ public class UserControllerTests {
 	}
 
 	@Test
-	public void createUser() throws Exception {
+	public void createUserTest() throws Exception {
 		String userJson = json(new User(
 				"anastasia", "password"));
 
@@ -147,9 +147,6 @@ public class UserControllerTests {
 				.content(userJson))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("username", is("password")));
-
-
-
 	}
 
 	private String json(Object o) throws IOException {

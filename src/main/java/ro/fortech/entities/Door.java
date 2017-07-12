@@ -36,4 +36,8 @@ public class Door {
 
     Door(){}
 
+    public void updateDoor(Door input) {
+        this.name = input.name;
+        this.isClosed = input.isClosed;
+    }
 }

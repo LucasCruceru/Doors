@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +18,7 @@ import ro.fortech.entities.User;
 import ro.fortech.repositories.DoorRepository;
 import ro.fortech.repositories.UserRepository;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +27,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -86,7 +88,7 @@ public class DoorControllerTests {
     @Test
     public void readAllDoorsTest() throws Exception {
 
-        mockMvc.perform(get("/action/" + username))
+        mockMvc.perform(get("/doors/getAll"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -99,4 +101,63 @@ public class DoorControllerTests {
 
     }
 
+    @Test
+    public void readSingleDoorTest() throws Exception {
+
+        System.out.println(json(this.doors.get(0)));
+        mockMvc.perform(get("/doors/"
+                +this.doors.get(0).getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("id",is(this.doors.get(0).getId().intValue())))
+                .andExpect(jsonPath("name", is("GarageDoor")))
+                .andExpect(jsonPath("closed", is(true)));
+    }
+
+    @Test
+    public void deleteDoorTest() throws Exception {
+        mockMvc.perform(delete("/doors/"
+                + this.doors.get(0).getId())
+                .contentType(contentType))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void createDoorTest() throws Exception {
+        String doorJson = json(new Door(
+                "AnotherDoor", true));
+
+        this.mockMvc.perform(post("/doors")
+                .contentType(contentType)
+                .content(doorJson))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void updateTest() throws Exception {
+
+        Door temp = new Door("AnotherDoor", false);
+
+        this.doors.get(0).updateDoor(temp);
+
+        String doorJson = json(this.doors.get(0));
+
+        System.out.println(doorJson);
+
+        this.mockMvc.perform(put("/doors/" +
+                this.doors.get(0).getId())
+                .contentType(contentType)
+                .content(doorJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name", is("AnotherDoor")))
+                .andExpect(jsonPath("closed", is(false))) // ?????
+        ;
+    }
+
+    private String json(Object o) throws IOException {
+        MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
+        this.mappingJackson2HttpMessageConverter.write(
+                o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
+        return mockHttpOutputMessage.getBodyAsString();
+    }
 }
