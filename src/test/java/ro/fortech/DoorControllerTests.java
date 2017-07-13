@@ -16,7 +16,6 @@ import org.springframework.web.context.WebApplicationContext;
 import ro.fortech.entities.Door;
 import ro.fortech.entities.User;
 import ro.fortech.repositories.DoorRepository;
-import ro.fortech.repositories.UserRepository;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -28,9 +27,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
@@ -140,10 +137,11 @@ public class DoorControllerTests {
 
         this.doors.get(0).updateDoor(temp);
 
-        String doorJson = json(this.doors.get(0));
+        String doorJson = json(doors.get(0));
 
         System.out.println(doorJson);
 
+        System.out.println(json(doors.get(0)));
         this.mockMvc.perform(put("/doors/" +
                 this.doors.get(0).getId())
                 .contentType(contentType)

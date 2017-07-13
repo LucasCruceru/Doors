@@ -1,9 +1,18 @@
 package ro.fortech.entities;
 
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 
+@Entity
 public class Log {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+
 
     private Date date;
     private String username;
@@ -15,11 +24,4 @@ public class Log {
         this.doorName = doorName;
     }
 
-
-
-    //private static Log INSTANCE = new Log();
-
-//    public static Log currentInstance(){
-//        return INSTANCE;
-//    }
 }

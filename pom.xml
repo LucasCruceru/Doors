@@ -4,12 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ro.fortech</groupId>
-	<artifactId>door-automatization</artifactId>
+	<artifactId>home-automation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Door-automatization</name>
-	<description>//TODO</description>
+	<name>HomeAutomation</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
